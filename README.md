@@ -422,7 +422,7 @@ flexql_optimized_final/
 │   ├── index/index.c           open-addressing hash index
 │   ├── cache/cache.c           LRU doubly-linked list + hash map
 │   ├── query/executor.c        CREATE/INSERT/SELECT/JOIN execution
-│   └── concurrency/threadpool.c    POSIX thread pool (16 workers)
+│   └── concurrency/threadpool.c    POSIX thread pool (32 workers)
 ├── tests/
 │   ├── unit_test.c             51 unit tests
 │   └── bench.c                 10 M-row benchmark client
