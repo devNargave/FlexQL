@@ -1,0 +1,15 @@
+\begin{tikzpicture}[
+  box/.style={rectangle,draw,rounded corners,align=center,minimum width=44mm,minimum height=9mm},
+  arr/.style={-Latex,thick}
+]
+\node[box,fill=blue!12] (c) {Client sends batch\\\texttt{BATCH:<n>} + SQLs\\(writev)};
+\node[box,fill=orange!18,right=18mm of c] (p) {Fast INSERT parsing\\multi-row VALUES};
+\node[box,fill=green!12,right=18mm of p] (e) {Executor bulk insert\\one lock + one invalidate};
+\node[box,fill=purple!12,right=18mm of e] (r) {Server replies\\packed responses};
+
+\draw[arr] (c) -- (p);
+\draw[arr] (p) -- (e);
+\draw[arr] (e) -- (r);
+
+\node[below=10mm of $(p)!0.5!(e)$] (note) {\small Goal: reduce RTT + syscall overhead for 10M inserts.};
+\end{tikzpicture}

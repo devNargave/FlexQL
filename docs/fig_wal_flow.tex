@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+  node distance=10mm,
+  box/.style={rectangle,draw,rounded corners,align=center,minimum width=56mm,minimum height=8mm},
+  arr/.style={-Latex,thick}
+]
+\node[box,fill=blue!12] (stmt) {CREATE/INSERT request arrives};
+\node[box,fill=green!12,below=of stmt] (exec) {Executor applies mutation\\to in-memory state};
+\node[box,fill=orange!18,below=of exec] (enq) {Enqueue WAL item\\(mutex+cond queue)};
+\node[box,fill=yellow!20,left=22mm of enq] (wal) {WAL thread (bg)\\append to flexql.wal};
+\node[box,fill=green!12,right=22mm of enq] (ok) {Send OK to client\\(non-blocking)};
+\node[box,fill=red!12,below=12mm of enq] (crash) {Crash / Kill / Restart};
+\node[box,fill=blue!12,below=of crash] (replay) {Startup: replay WAL\\restore data};
+
+\draw[arr] (stmt) -- (exec);
+\draw[arr] (exec) -- (enq);
+\draw[arr] (enq) -- (wal);
+\draw[arr] (enq) -- (ok);
+\draw[arr] (crash) -- (replay);
+\draw[arr,dashed] (wal) |- (crash);
+\end{tikzpicture}

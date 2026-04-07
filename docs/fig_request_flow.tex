@@ -1,0 +1,31 @@
+\begin{tikzpicture}[
+  node distance=9mm,
+  box/.style={rectangle,draw,rounded corners,align=center,minimum width=54mm,minimum height=8mm},
+  decision/.style={shape=diamond,draw,align=center,aspect=2},
+  arr/.style={-Latex,thick}
+]
+\node[box] (accept) {Accept connection};
+\node[box,below=of accept] (dispatch) {Dispatch to worker thread};
+\node[box,below=of dispatch] (recv) {Receive framed message};
+\node[decision,below=of recv] (batch) {Batch header?};
+\node[box,below left=of batch,xshift=-10mm] (single) {Parse single SQL};
+\node[box,below right=of batch,xshift=10mm] (multi) {Receive N SQL strings};
+\node[box,below=of batch,yshift=-22mm] (exec) {Execute statement(s)};
+\node[decision,below=of exec] (persist) {Persistence enabled?\\(FLEXQL\_PERSIST\_DIR)};
+\node[box,below left=of persist,xshift=-10mm] (enq) {Enqueue WAL record};
+\node[box,below right=of persist,xshift=10mm] (skip) {Skip WAL};
+\node[box,below=of persist,yshift=-22mm] (send) {Send response(s)};
+
+\draw[arr] (accept) -- (dispatch);
+\draw[arr] (dispatch) -- (recv);
+\draw[arr] (recv) -- (batch);
+\draw[arr] (batch) -- node[left]{No} (single);
+\draw[arr] (batch) -- node[right]{Yes} (multi);
+\draw[arr] (single) |- (exec);
+\draw[arr] (multi) |- (exec);
+\draw[arr] (exec) -- (persist);
+\draw[arr] (persist) -- node[left]{Yes} (enq);
+\draw[arr] (persist) -- node[right]{No} (skip);
+\draw[arr] (enq) |- (send);
+\draw[arr] (skip) |- (send);
+\end{tikzpicture}

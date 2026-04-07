@@ -1,0 +1,29 @@
+# Build artifacts
+/build/
+/bin/
+*.o
+*.a
+
+# Persistence / runtime data
+/persist/
+/persist_small/
+*.wal
+
+# LaTeX build outputs
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Editor / office lock files
+.~lock.*
+
+# Office documents (source docs can be added back if required)
+*.docx
+
+# Root benchmark binary (source is benchmark_flexql.cpp)
+/benchmark_flexql
+
+# OS / tooling
+.DS_Store
