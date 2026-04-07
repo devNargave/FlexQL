@@ -25,5 +25,8 @@
 # Root benchmark binary (source is benchmark_flexql.cpp)
 /benchmark_flexql
 
+# Optional local documentation outputs
+/docs/
+
 # OS / tooling
 .DS_Store
